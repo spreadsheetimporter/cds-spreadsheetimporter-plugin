@@ -1,0 +1,32 @@
+{
+  "name": "cds-spreadsheetimporter-plugin",
+  "version": "1.0.0",
+  "description": "Spreadsheet importer as CAP plugin",
+  "main": "cds-plugin.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "sap",
+    "cap",
+    "cds",
+    "plugin",
+    "cds-plugin",
+    "cap-plugin"
+  ],
+  "author": "Wouter Lemaire",
+  "license": "ISC",
+  "peerDependencies": {
+    "@sap/cds": ">=7"
+  },
+  "devDependencies": {
+    "@sap/cds": "^8.4.1"
+  },
+  "dependencies": {
+    "xlsx": "^0.18.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lemaiwo/cds-spreadsheetimporter-plugin.git"
+  }
+}
