@@ -1,5 +1,5 @@
 ### upload spreadsheet for specific entity
-PUT http://localhost:4004/odata/v4/importer/Spreadsheet(entity='Books')/content
+PUT http://localhost:4004/odata/v4/importer/Spreadsheet(entity='my.bookshop.Books')/content
 Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
 
 < .\spreadsheettest.xlsx

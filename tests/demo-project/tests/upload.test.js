@@ -12,7 +12,7 @@ describe('Upload API Tests', () => {
         const fileBuffer = fs.readFileSync(filePath);
         
         const uploadResponse = await fetch(
-            `${BASE_URL}/odata/v4/importer/Spreadsheet(entity='Books')/content`,
+            `${BASE_URL}/odata/v4/importer/Spreadsheet(entity='my.bookshop.Books')/content`,
             {
                 method: 'PUT',
                 headers: {
