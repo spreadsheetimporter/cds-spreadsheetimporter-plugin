@@ -5,7 +5,8 @@
   "main": "cds-plugin.js",
   "scripts": {
     "start:test": "npm run start --workspace=tests/demo-project",
-    "test": "jest"
+    "test": "jest",
+    "release": "release-it"
   },
   "keywords": [
     "sap",
@@ -21,7 +22,9 @@
     "@sap/cds": ">=7"
   },
   "devDependencies": {
-    "@sap/cds": "^8.4.1"
+    "@sap/cds": "^8.4.1",
+    "@release-it/conventional-changelog": "^7.0.2",
+    "release-it": "^16.3.0"
   },
   "dependencies": {
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
