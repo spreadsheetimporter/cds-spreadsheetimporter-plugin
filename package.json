@@ -4,7 +4,8 @@
   "description": "Spreadsheet importer as CAP plugin",
   "main": "cds-plugin.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start:test": "npm run start --workspace=tests/demo-project",
+    "test": "jest"
   },
   "keywords": [
     "sap",
@@ -28,5 +29,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/lemaiwo/cds-spreadsheetimporter-plugin.git"
-  }
+  },
+  "workspaces": [
+    "tests/demo-project"
+  ]
 }
