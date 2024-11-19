@@ -9,6 +9,10 @@ module.exports = class ImporterService extends cds.ApplicationService  {
     this.on('UPDATE', 'Spreadsheet', async req => {
       try {
         const entity = cds.entities()[req.params[0].entity];
+        if (!entity) {
+          req.error(400, `Entity '${req.params[0].entity}' not found`);
+          return;
+        }
         let spreadsheetSheetsData = [];
         let columnNames = [];
         const spreadSheet = XLSX.read(req.data.content.readableBuffer[0], { 
