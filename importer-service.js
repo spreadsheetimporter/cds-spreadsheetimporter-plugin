@@ -6,15 +6,18 @@ const Parser = require("./utils/Parser");
 
 module.exports = class ImporterService extends cds.ApplicationService  {
   init() {
-
-// module.exports = (srv) => {
-    this.on('UPDATE','Spreadsheet', async req => {
-    // srv.on('UPDATE','Spreadsheet', async req => {
-      // const db = cds.connect.to('db');
+    this.on('UPDATE', 'Spreadsheet', async req => {
+      try {
         const entity = cds.entities()[req.params[0].entity];
         let spreadsheetSheetsData = [];
         let columnNames = [];
-        const spreadSheet = XLSX.read(req.data.content.readableBuffer[0], { type: "buffer", cellNF: true, cellDates: true, cellText: true, cellFormula: true });
+        const spreadSheet = XLSX.read(req.data.content.readableBuffer[0], { 
+          type: "buffer", 
+          cellNF: true, 
+          cellDates: true, 
+          cellText: true, 
+          cellFormula: true 
+        });
 
         // Loop over the sheet names in the workbook
         for (const sheetName of Object.keys(spreadSheet.Sheets)) {
@@ -28,8 +31,12 @@ module.exports = class ImporterService extends cds.ApplicationService  {
             spreadsheetSheetsData = spreadsheetSheetsData.concat(currSheetData);
             columnNames = columnNames.concat(XLSX.utils.sheet_to_json(spreadSheet.Sheets[sheetName], { header: 1 })[0]);
         }
-        const data = Parser.parseSpreadsheetData(spreadsheetSheetsData,entity.elements);
-        await cds.db.run(INSERT(data).into(entity.name) );
+        const data = Parser.parseSpreadsheetData(spreadsheetSheetsData, entity.elements);
+        await cds.db.run(INSERT(data).into(entity.name));
+        
+      } catch (error) {
+        req.error(500, `Failed to process spreadsheet: ${error.message}`);
+      }
     });
     return super.init();
   }
