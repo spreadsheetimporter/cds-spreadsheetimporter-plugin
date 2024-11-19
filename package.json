@@ -1,6 +1,6 @@
 {
   "name": "cds-spreadsheetimporter-plugin",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Spreadsheet importer as CAP plugin",
   "main": "cds-plugin.js",
   "scripts": {
