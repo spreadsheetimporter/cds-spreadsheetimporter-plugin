@@ -1,5 +1,12 @@
 
 
+## [1.0.3](https://github.com/lemaiwo/cds-spreadsheetimporter-plugin/compare/v1.0.2...v1.0.3) (2025-04-05)
+
+
+### Bug Fixes
+
+* proper handling of stream ([419ba9b](https://github.com/lemaiwo/cds-spreadsheetimporter-plugin/commit/419ba9b11509f39617f932bc229303f06d2bbf14))
+
 ## [1.0.2](https://github.com/lemaiwo/cds-spreadsheetimporter-plugin/compare/v1.0.1...v1.0.2) (2024-11-19)
 
 
