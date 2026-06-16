@@ -31,7 +31,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/lemaiwo/cds-spreadsheetimporter-plugin.git"
+    "url": "https://github.com/spreadsheetimporter/cds-spreadsheetimporter-plugin.git"
   },
   "workspaces": [
     "tests/demo-project"
