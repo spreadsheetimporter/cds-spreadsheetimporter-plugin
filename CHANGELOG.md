@@ -1,5 +1,12 @@
 
 
+# [1.1.0](https://github.com/spreadsheetimporter/cds-spreadsheetimporter-plugin/compare/v1.0.3...v1.1.0) (2026-06-16)
+
+
+### Features
+
+* allow scoped spreadsheet imports ([#2](https://github.com/spreadsheetimporter/cds-spreadsheetimporter-plugin/issues/2)) ([05e9b2f](https://github.com/spreadsheetimporter/cds-spreadsheetimporter-plugin/commit/05e9b2f856e3414d5dc25bfa29fdb3d5f087bc18))
+
 ## [1.0.3](https://github.com/lemaiwo/cds-spreadsheetimporter-plugin/compare/v1.0.2...v1.0.3) (2025-04-05)
 
 
