@@ -1,9 +1,9 @@
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
+const cds = require('@sap/cds');
 
 describe('Upload API Tests', () => {
-    const BASE_URL = 'http://localhost:4004';
+    const cdsTest = cds.test('serve', 'all', '--in-memory?').in(path.join(__dirname, '..'));
     
 
     test('complete upload workflow', async () => {
@@ -12,7 +12,7 @@ describe('Upload API Tests', () => {
         const fileBuffer = fs.readFileSync(filePath);
         
         const uploadResponse = await fetch(
-            `${BASE_URL}/odata/v4/importer/Spreadsheet(entity='my.bookshop.Books')/content`,
+            `${cdsTest.url}/odata/v4/importer/Spreadsheet(entity='my.bookshop.Books')/content`,
             {
                 method: 'PUT',
                 headers: {
@@ -34,7 +34,7 @@ describe('Upload API Tests', () => {
 
         // 3. Verify imported data
         const verifyResponse = await fetch(
-            `${BASE_URL}/odata/v4/catalog/Books`,
+            `${cdsTest.url}/odata/v4/catalog/Books`,
             {
                 method: 'GET'
             }
@@ -45,4 +45,4 @@ describe('Upload API Tests', () => {
         expect(books).toBeDefined();
         expect(Array.isArray(books.value)).toBeTruthy();
     });
-}); 
+});
