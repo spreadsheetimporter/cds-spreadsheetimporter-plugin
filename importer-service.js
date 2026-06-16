@@ -10,6 +10,27 @@ function getDefinitions() {
   return cds.model?.definitions || cds.entities?.() || {};
 }
 
+function getEntityLookup() {
+  return cds.entities?.() || {};
+}
+
+function findEntity(entityName, definitions, entityLookup) {
+  if (definitions[entityName]) {
+    return {
+      entity: definitions[entityName],
+      entityName,
+    };
+  }
+
+  const entity = entityLookup[entityName];
+  if (!entity) return undefined;
+
+  return {
+    entity,
+    entityName: entity.name || entityName,
+  };
+}
+
 function getProjectionSourceName(entity) {
   const ref =
     entity?.query?.SELECT?.from?.ref || entity?.projection?.from?.ref || [];
@@ -61,18 +82,23 @@ function getEnabledImportEntities(definitions = getDefinitions()) {
   return enabledEntities;
 }
 
-function resolveImportEntity(entityName, definitions = getDefinitions()) {
-  const requested = definitions[entityName];
-  if (!requested) return undefined;
+function resolveImportEntity(
+  entityName,
+  definitions = getDefinitions(),
+  entityLookup = getEntityLookup()
+) {
+  const found = findEntity(entityName, definitions, entityLookup);
+  if (!found) return undefined;
 
-  const requestedName = requested.name || entityName;
+  const requested = found.entity;
+  const requestedName = found.entityName;
   const persistenceName = resolvePersistenceName(
     requested,
     definitions,
     new Set(),
     requestedName
   );
-  const target = definitions[persistenceName] || requested;
+  const target = definitions[persistenceName] || entityLookup[persistenceName] || requested;
 
   return {
     requested,
@@ -82,11 +108,19 @@ function resolveImportEntity(entityName, definitions = getDefinitions()) {
   };
 }
 
-function isImportEnabledForEntity(entityName, definitions = getDefinitions()) {
+function isImportEnabledForEntity(
+  entityName,
+  definitions = getDefinitions(),
+  entityLookup = getEntityLookup()
+) {
   const enabledEntities = getEnabledImportEntities(definitions);
   if (enabledEntities.size === 0) return true;
 
-  const resolvedEntity = resolveImportEntity(entityName, definitions);
+  const resolvedEntity = resolveImportEntity(
+    entityName,
+    definitions,
+    entityLookup
+  );
   if (!resolvedEntity) return false;
 
   return (
@@ -109,12 +143,23 @@ class ImporterService extends cds.ApplicationService {
       console.log('Request data structure:', Object.keys(req.data || {}));
 
       const definitions = getDefinitions();
-      const resolvedEntity = resolveImportEntity(requestedEntityName, definitions);
+      const entityLookup = getEntityLookup();
+      const resolvedEntity = resolveImportEntity(
+        requestedEntityName,
+        definitions,
+        entityLookup
+      );
       if (!resolvedEntity) {
         return req.reject(400, `Entity '${requestedEntityName}' not found`);
       }
 
-      if (!isImportEnabledForEntity(requestedEntityName, definitions)) {
+      if (
+        !isImportEnabledForEntity(
+          requestedEntityName,
+          definitions,
+          entityLookup
+        )
+      ) {
         return req.reject({
           status: 403,
           code: ENTITY_NOT_ENABLED_CODE,
@@ -223,6 +268,7 @@ module.exports = ImporterService;
 module.exports._private = {
   ENTITY_NOT_ENABLED_CODE,
   IMPORTER_ENABLED_ANNOTATION,
+  findEntity,
   getEnabledImportEntities,
   isImportEnabledForEntity,
   resolveImportEntity,

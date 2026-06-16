@@ -18,7 +18,13 @@ service CatalogService {
 }
 ```
 
-When at least one entity is annotated, the importer rejects uploads for every other entity with `403 SPREADSHEET_IMPORT_ENTITY_NOT_ENABLED`. Annotating a service projection also enables uploads for its underlying persistence entity, so existing URLs such as `/odata/v4/importer/Spreadsheet(entity='my.bookshop.Books')/content` keep working.
+When at least one entity is annotated, the importer rejects uploads for every other entity with `403 SPREADSHEET_IMPORT_ENTITY_NOT_ENABLED`. Annotating a service projection also enables uploads for its underlying persistence entity, so existing URLs such as `/odata/v4/importer/Spreadsheet(entity='my.bookshop.Books')/content` keep working. Short entity names resolved by CAP, such as `Books`, are supported as well.
+
+Use this annotation only to control which entities the importer may target. For user or role-based authorization, continue to use CAP authorization annotations such as `@requires` or `@restrict` on the importer service or your application services. For example:
+
+```cds
+annotate ImporterService with @requires: 'Admin';
+```
 
 ## Release Process
 

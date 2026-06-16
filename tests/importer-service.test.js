@@ -63,6 +63,35 @@ describe('import entity scoping', () => {
     expect(isImportEnabledForEntity('my.bookshop.Authors', definitions)).toBe(false);
   });
 
+  test('allows projections when the persistence entity is annotated', () => {
+    const definitions = {
+      'CatalogService.Books': projection('CatalogService.Books', 'my.bookshop.Books'),
+      'my.bookshop.Books': entity('my.bookshop.Books', {
+        [IMPORTER_ENABLED_ANNOTATION]: true,
+      }),
+    };
+
+    expect(isImportEnabledForEntity('CatalogService.Books', definitions)).toBe(true);
+    expect(isImportEnabledForEntity('my.bookshop.Books', definitions)).toBe(true);
+  });
+
+  test('resolves short entity names from CAP entity lookup', () => {
+    const definitions = {
+      'CatalogService.Books': projection('CatalogService.Books', 'my.bookshop.Books', {
+        [IMPORTER_ENABLED_ANNOTATION]: true,
+      }),
+      'my.bookshop.Books': entity('my.bookshop.Books'),
+    };
+    const entityLookup = {
+      Books: definitions['my.bookshop.Books'],
+    };
+
+    const resolved = resolveImportEntity('Books', definitions, entityLookup);
+
+    expect(resolved.targetName).toBe('my.bookshop.Books');
+    expect(isImportEnabledForEntity('Books', definitions, entityLookup)).toBe(true);
+  });
+
   test('resolves projection uploads to the persistence entity', () => {
     const definitions = {
       'CatalogService.Books': projection('CatalogService.Books', 'my.bookshop.Books'),
