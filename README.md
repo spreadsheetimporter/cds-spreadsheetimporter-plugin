@@ -2,6 +2,24 @@
 
 This is a plugin for the [CAP](https://cap.cloud.sap/) framework that allows you to import data from spreadsheets into your CAP project.
 
+## Enable Import for Selected Entities
+
+By default, the importer keeps the existing behavior and allows uploads for all entities. To limit uploads to selected entities, annotate the allowed service entities with `@spreadsheetimporter.enabled` in your CDS model:
+
+```cds
+using my.bookshop as my from '../db/schema';
+using from 'cds-spreadsheetimporter-plugin';
+
+service CatalogService {
+    @spreadsheetimporter.enabled
+    entity Books as projection on my.Books;
+
+    entity Authors as projection on my.Authors;
+}
+```
+
+When at least one entity is annotated, the importer rejects uploads for every other entity with `403 SPREADSHEET_IMPORT_ENTITY_NOT_ENABLED`. Annotating a service projection also enables uploads for its underlying persistence entity, so existing URLs such as `/odata/v4/importer/Spreadsheet(entity='my.bookshop.Books')/content` keep working.
+
 ## Release Process
 
 This project uses [release-it](https://github.com/release-it/release-it) to automate version management and package publishing. The release workflow is configured through GitHub Actions and can be triggered in two ways:
